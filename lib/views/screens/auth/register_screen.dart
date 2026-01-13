@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:shaunking_app/core/constants/colors.dart';
 import 'login_screen.dart';
 
@@ -25,21 +26,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
     return Scaffold(
       backgroundColor: AppColors.cardBackground,
       body: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 60),
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 30),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Row(
               children: [
-                // Back Button
-                IconButton(
-                  icon: const Icon(Icons.arrow_back_ios),
-                  color: Colors.black, // or AppColors.primary
-                  onPressed: () {
-                    Navigator.pop(context); // go back to previous screen
-                  },
-                ),
-
                 // Logo
                 Expanded(
                   child: Container(),
@@ -51,7 +43,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               'assets/images/logo.png',
               height: 200,
             ),
-            const SizedBox(height: 40),
+            // const SizedBox(height: 40),
 
             // Username
             TextField(
@@ -146,26 +138,19 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     return;
                   }
 
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Registered successfully!')),
-                  );
+                  // ScaffoldMessenger.of(context).showSnackBar(
+                  //   const SnackBar(content: Text('Registered successfully!')),
+                  // );
 
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const LoginScreen()),
-                  );
+                  // Get.offAll(const LoginScreen());
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.primary,
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
+                  padding: const EdgeInsets.symmetric(vertical: 13),
                 ),
                 child: const Text(
                   'Register',
-                  style: TextStyle(fontSize: 16),
+                  style: TextStyle(fontSize: 16, color: AppColors.textPrimary),
                 ),
               ),
             ),
@@ -178,11 +163,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 const Text("Already have an account?"),
                 TextButton(
                   onPressed: () {
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const LoginScreen()),
-                    );
+                    Get.offAll(const LoginScreen());
                   },
                   child: const Text(
                     'Login',

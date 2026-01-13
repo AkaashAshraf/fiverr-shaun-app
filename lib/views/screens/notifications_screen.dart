@@ -28,6 +28,7 @@ class NotificationScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppColors.scaffoldBackground,
       appBar: AppBar(
+        leading: Container(),
         title: const Text('Notifications'),
         backgroundColor: AppColors.primary,
         foregroundColor: AppColors.appBarForeground,

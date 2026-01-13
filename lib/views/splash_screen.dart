@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shaunking_app/core/constants/strings.dart';
+import 'package:shaunking_app/core/services/cache.dart';
 import 'package:shaunking_app/core/widgets/loading.dart';
+import 'package:shaunking_app/views/screens/auth/login_screen.dart';
 import 'package:shaunking_app/views/screens/home_screen.dart';
 
 class SplashView extends StatefulWidget {
@@ -18,8 +21,14 @@ class _SplashViewState extends State<SplashView> {
   }
 
   void _navigateNext() async {
+    String email = await readCache(AppStrings.userEmail) ?? '';
+
     await Future.delayed(const Duration(seconds: 2));
-    Get.to(const HomeScreen());
+    if (email.isNotEmpty) {
+      Get.offAll(const HomeScreen());
+    } else {
+      Get.offAll(const LoginScreen());
+    }
   }
 
   @override

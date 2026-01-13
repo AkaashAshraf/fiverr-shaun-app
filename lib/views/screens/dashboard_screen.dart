@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:shaunking_app/controllers/auth_controller.dart';
 import 'package:shaunking_app/core/constants/colors.dart';
 
 class DashboardScreen extends StatelessWidget {
-  const DashboardScreen({super.key});
+  DashboardScreen({super.key});
+
+  // Get the AuthController instance
+  final AuthController authController = Get.find<AuthController>();
 
   @override
   Widget build(BuildContext context) {
@@ -14,21 +19,35 @@ class DashboardScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Welcome Header
-              const Text(
-                'Welcome, Shaun!',
-                style: TextStyle(
-                  color: AppColors.primary,
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                ),
+              // Welcome Header (dynamic)
+              Row(
+                children: [
+                  const Text(
+                    'Welcome, ',
+                    style: TextStyle(
+                      color: AppColors.primary,
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Obx(
+                    () => Text(
+                      '${authController.userName.value.isNotEmpty ? authController.userName.value : 'User'}!',
+                      style: const TextStyle(
+                        color: AppColors.primary,
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ],
               ),
-              const SizedBox(height: 10),
+              const SizedBox(height: 5),
               const Text(
                 'Here is your summary for today',
                 style: TextStyle(
                   color: AppColors.textSecondary,
-                  fontSize: 16,
+                  fontSize: 15,
                 ),
               ),
               const SizedBox(height: 20),
@@ -50,7 +69,7 @@ class DashboardScreen extends StatelessWidget {
               ),
               const SizedBox(height: 30),
 
-              // Recent Activity
+              // Recent Activity Header
               const Text(
                 'Recent Activity',
                 style: TextStyle(
@@ -61,6 +80,7 @@ class DashboardScreen extends StatelessWidget {
               ),
               const SizedBox(height: 10),
 
+              // Recent Activity List
               Column(
                 children: [
                   _buildActivityItem('Order #1234 delivered', '2 hours ago'),
@@ -77,7 +97,7 @@ class DashboardScreen extends StatelessWidget {
     );
   }
 
-  // Dashboard Card
+  // Dashboard Card Widget
   Widget _buildDashboardCard(String title, String value, IconData icon) {
     return Container(
       padding: const EdgeInsets.all(16),
@@ -118,7 +138,7 @@ class DashboardScreen extends StatelessWidget {
     );
   }
 
-  // Recent Activity Item
+  // Recent Activity Item Widget
   Widget _buildActivityItem(String title, String time) {
     return Card(
       margin: const EdgeInsets.only(bottom: 12),
