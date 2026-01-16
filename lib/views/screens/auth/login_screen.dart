@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shaunking_app/controllers/auth_controller.dart';
@@ -17,21 +15,31 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+
   bool _obscurePassword = true;
 
-  // GetX Controller
-  final AuthController authController = Get.put(AuthController());
+  /// Use existing controller (do NOT create new one)
+  final AuthController authController = Get.find<AuthController>();
+
+  void _login() {
+    if (_emailController.text.isEmpty || _passwordController.text.isEmpty) {
+      Get.snackbar('Error', 'Please fill all fields');
+      return;
+    }
+
+    authController.loginWithEmail(
+      email: _emailController.text.trim(),
+      password: _passwordController.text.trim(),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
       body: Obx(() {
-        // 🔄 Loading State
         if (authController.isLoading.value) {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
+          return const Center(child: CircularProgressIndicator());
         }
 
         return SingleChildScrollView(
@@ -39,15 +47,15 @@ class _LoginScreenState extends State<LoginScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              // Logo
+              /// Logo
               Image.asset(
                 'assets/images/logo.png',
                 height: 200,
               ),
               const SizedBox(height: 40),
 
-              // Email Field
-              TextField(
+              /// Email Field
+              TextFormField(
                 controller: _emailController,
                 keyboardType: TextInputType.emailAddress,
                 decoration: const InputDecoration(
@@ -58,8 +66,8 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               const SizedBox(height: 20),
 
-              // Password Field
-              TextField(
+              /// Password Field
+              TextFormField(
                 controller: _passwordController,
                 obscureText: _obscurePassword,
                 decoration: InputDecoration(
@@ -82,7 +90,7 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               const SizedBox(height: 10),
 
-              // Forgot Password
+              /// Forgot Password
               Align(
                 alignment: Alignment.centerRight,
                 child: TextButton(
@@ -100,18 +108,15 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               const SizedBox(height: 20),
 
-              // Login Button (Email/Password – TODO)
+              /// Login Button
               SizedBox(
                 width: double.infinity,
+                height: 48,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.primary,
-                    padding: const EdgeInsets.symmetric(vertical: 13),
                   ),
-                  onPressed: () {
-                    // TODO: Implement email/password login
-                    inspect('Email login not implemented yet');
-                  },
+                  onPressed: _login,
                   child: const Text(
                     'Login',
                     style: TextStyle(
@@ -123,9 +128,10 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               const SizedBox(height: 20),
 
-              // Login with Google
+              /// Google Login
               SizedBox(
                 width: double.infinity,
+                height: 48,
                 child: OutlinedButton.icon(
                   icon: Image.asset(
                     'assets/images/google_logo.png',
@@ -140,21 +146,20 @@ class _LoginScreenState extends State<LoginScreen> {
                     authController.loginWithGoogle();
                   },
                   style: OutlinedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(vertical: 14),
                     side: const BorderSide(color: Colors.grey),
                   ),
                 ),
               ),
               const SizedBox(height: 30),
 
-              // Register
+              /// Register
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   const Text("Don't have an account?"),
                   TextButton(
                     onPressed: () {
-                      Get.offAll(const RegisterScreen());
+                      Get.offAll(const SignUpScreen());
                     },
                     child: const Text(
                       'Register',

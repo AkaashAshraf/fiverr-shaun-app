@@ -47,6 +47,14 @@ android {
         versionCode = flutterVersionCode.toInteger()
         versionName = flutterVersionName
     }
+    signingConfigs {
+        debug {
+            storeFile file("/Users/akash/Documents/keys/google keys/shaun-app/keystore2")
+            storePassword "shaundemoapp"   // or the password you set
+            keyAlias "Shaun"     // alias you used
+            keyPassword "shaundemoapp"      // or the password you set
+        }
+    }
 
     buildTypes {
         release {

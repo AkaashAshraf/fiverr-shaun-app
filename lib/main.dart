@@ -13,12 +13,13 @@ void main() {
 }
 
 init() async {
+  Get.put(AuthController());
+
   WidgetsFlutterBinding.ensureInitialized();
 
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform, // important
   );
-  Get.put(AuthController());
 }
 
 class MyApp extends StatelessWidget {

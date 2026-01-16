@@ -29,8 +29,15 @@ class NotificationScreen extends StatelessWidget {
       backgroundColor: AppColors.scaffoldBackground,
       appBar: AppBar(
         leading: Container(),
-        title: const Text('Notifications'),
-        backgroundColor: AppColors.primary,
+        title: const Text(
+          'Notifications',
+          style: TextStyle(
+            color: AppColors.textPrimary,
+            fontSize: 18,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        backgroundColor: AppColors.scaffoldBackground,
         foregroundColor: AppColors.appBarForeground,
       ),
       body: ListView.builder(
@@ -54,10 +61,10 @@ class NotificationScreen extends StatelessWidget {
       color: AppColors.scaffoldBackground,
       elevation: 2,
       child: ListTile(
-        leading: const Icon(Icons.notifications, color: AppColors.primary),
+        leading: const Icon(Icons.notifications, color: AppColors.textPrimary),
         title: Text(
           title,
-          style: const TextStyle(color: AppColors.primary),
+          style: const TextStyle(color: AppColors.textPrimary),
         ),
         subtitle: Text(
           time,

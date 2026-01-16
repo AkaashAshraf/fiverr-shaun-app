@@ -19,17 +19,20 @@ class SettingsScreen extends StatelessWidget {
           'Settings',
           style: TextStyle(
             color: AppColors.textPrimary,
+            fontSize: 18,
+            fontWeight: FontWeight.w600,
           ),
         ),
-        backgroundColor: AppColors.primary,
+        backgroundColor: AppColors.scaffoldBackground,
         elevation: 0,
       ),
       body: Column(
         children: [
           // User Header
+
           Container(
             width: double.infinity,
-            color: AppColors.primary,
+            // color: const Color.fromARGB(255, 236, 236, 236),
             padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 20),
             child: Obx(
               () => Row(
@@ -52,7 +55,7 @@ class SettingsScreen extends StatelessWidget {
                             ? authController.userName.value
                             : 'User',
                         style: const TextStyle(
-                          color: Colors.white,
+                          color: AppColors.textPrimary,
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
                         ),
@@ -63,7 +66,7 @@ class SettingsScreen extends StatelessWidget {
                             ? authController.userEmail.value
                             : 'user@email.com',
                         style: const TextStyle(
-                          color: Colors.white70,
+                          color: AppColors.textPrimary,
                           fontSize: 16,
                         ),
                       ),
@@ -73,7 +76,11 @@ class SettingsScreen extends StatelessWidget {
               ),
             ),
           ),
-
+          Container(
+            height: 1,
+            width: double.infinity,
+            color: AppColors.border,
+          ),
           const SizedBox(height: 20),
 
           // Options List
@@ -81,8 +88,12 @@ class SettingsScreen extends StatelessWidget {
             child: ListView(
               children: [
                 ListTile(
-                  leading: const Icon(Icons.logout, color: Colors.red),
-                  title: const Text('Logout'),
+                  leading:
+                      const Icon(Icons.logout, color: AppColors.textPrimary),
+                  title: const Text(
+                    'Logout',
+                    style: TextStyle(color: AppColors.textPrimary),
+                  ),
                   onTap: () {
                     // Show confirmation popup
                     Get.defaultDialog(

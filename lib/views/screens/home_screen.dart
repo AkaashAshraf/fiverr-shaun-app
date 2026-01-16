@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:shaunking_app/controllers/auth_controller.dart';
 import 'package:shaunking_app/core/constants/colors.dart';
 import 'package:shaunking_app/views/screens/dashboard_screen.dart';
 import 'package:shaunking_app/views/screens/notifications_screen.dart';
@@ -17,10 +19,16 @@ class _HomeScreenState extends State<HomeScreen> {
 
   final List<Widget> _screens = [
     DashboardScreen(),
-    ProfileScreen(),
+    PersonalDataScreen(),
     const NotificationScreen(),
     SettingsScreen(),
   ];
+
+  @override
+  void initState() {
+    Get.put(AuthController());
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {

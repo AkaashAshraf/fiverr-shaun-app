@@ -5,6 +5,7 @@ import 'package:shaunking_app/core/services/cache.dart';
 import 'package:shaunking_app/core/widgets/loading.dart';
 import 'package:shaunking_app/views/screens/auth/login_screen.dart';
 import 'package:shaunking_app/views/screens/home_screen.dart';
+import 'package:shaunking_app/views/screens/welcome_screen.dart';
 
 class SplashView extends StatefulWidget {
   const SplashView({Key? key}) : super(key: key);

@@ -1,181 +1,182 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shaunking_app/controllers/auth_controller.dart';
 import 'package:shaunking_app/core/constants/colors.dart';
-import 'login_screen.dart';
 
-class RegisterScreen extends StatefulWidget {
-  const RegisterScreen({super.key});
+class SignUpScreen extends StatefulWidget {
+  const SignUpScreen({super.key});
 
   @override
-  State<RegisterScreen> createState() => _RegisterScreenState();
+  State<SignUpScreen> createState() => _SignUpScreenState();
 }
 
-class _RegisterScreenState extends State<RegisterScreen> {
-  final TextEditingController _usernameController = TextEditingController();
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _phoneController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _confirmPasswordController =
-      TextEditingController();
+class _SignUpScreenState extends State<SignUpScreen> {
+  final _formKey = GlobalKey<FormState>();
 
-  bool _obscurePassword = true;
-  bool _obscureConfirmPassword = true;
+  final TextEditingController firstNameCtrl = TextEditingController();
+  final TextEditingController lastNameCtrl = TextEditingController();
+  final TextEditingController emailCtrl = TextEditingController();
+  final TextEditingController phoneCtrl = TextEditingController();
+  final TextEditingController addressCtrl = TextEditingController();
+  final TextEditingController passwordCtrl = TextEditingController();
+  final TextEditingController confirmPasswordCtrl = TextEditingController();
+
+  final AuthController authController = Get.find<AuthController>();
+
+  bool agree = false;
+
+  void _submit() {
+    if (!_formKey.currentState!.validate()) return;
+
+    if (!agree) {
+      Get.snackbar('Terms', 'Please agree to the Terms of Use');
+      return;
+    }
+
+    if (passwordCtrl.text != confirmPasswordCtrl.text) {
+      Get.snackbar('Error', 'Passwords do not match');
+      return;
+    }
+
+    authController.signUpWithEmail(
+      firstName: firstNameCtrl.text.trim(),
+      lastName: lastNameCtrl.text.trim(),
+      email: emailCtrl.text.trim(),
+      phone: phoneCtrl.text.trim(),
+      address: addressCtrl.text.trim(),
+      password: passwordCtrl.text.trim(),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.cardBackground,
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios, color: Color(0xFF5DB6B1)),
+          onPressed: () => Get.back(),
+        ),
+        title: const Text(
+          'Sign Up',
+          style: TextStyle(color: Color(0xFF5DB6B1)),
+        ),
+      ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 30),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Row(
-              children: [
-                // Logo
-                Expanded(
-                  child: Container(),
-                ),
-              ],
-            ),
-
-            Image.asset(
-              'assets/images/logo.png',
-              height: 200,
-            ),
-            // const SizedBox(height: 40),
-
-            // Username
-            TextField(
-              controller: _usernameController,
-              decoration: const InputDecoration(
-                labelText: 'Username',
-                prefixIcon: Icon(Icons.person),
-                border: OutlineInputBorder(),
+        padding: const EdgeInsets.all(20),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            children: [
+              _inputField(firstNameCtrl, 'First name'),
+              _inputField(lastNameCtrl, 'Last name'),
+              _inputField(
+                emailCtrl,
+                'Email Address',
+                keyboard: TextInputType.emailAddress,
               ),
-            ),
-            const SizedBox(height: 20),
-
-            // Email
-            TextField(
-              controller: _emailController,
-              keyboardType: TextInputType.emailAddress,
-              decoration: const InputDecoration(
-                labelText: 'Email',
-                prefixIcon: Icon(Icons.email),
-                border: OutlineInputBorder(),
+              _inputField(
+                phoneCtrl,
+                'Phone Number',
+                keyboard: TextInputType.phone,
               ),
-            ),
-            const SizedBox(height: 20),
-
-            // Phone
-            TextField(
-              controller: _phoneController,
-              keyboardType: TextInputType.phone,
-              decoration: const InputDecoration(
-                labelText: 'Phone',
-                prefixIcon: Icon(Icons.phone),
-                border: OutlineInputBorder(),
+              _inputField(addressCtrl, 'Address'),
+              _inputField(
+                passwordCtrl,
+                'Password',
+                obscure: true,
               ),
-            ),
-            const SizedBox(height: 20),
-
-            // Password
-            TextField(
-              controller: _passwordController,
-              obscureText: _obscurePassword,
-              decoration: InputDecoration(
-                labelText: 'Password',
-                prefixIcon: const Icon(Icons.lock),
-                border: const OutlineInputBorder(),
-                suffixIcon: IconButton(
-                  icon: Icon(_obscurePassword
-                      ? Icons.visibility_off
-                      : Icons.visibility),
-                  onPressed: () {
-                    setState(() {
-                      _obscurePassword = !_obscurePassword;
-                    });
-                  },
-                ),
+              _inputField(
+                confirmPasswordCtrl,
+                'Confirm Password',
+                obscure: true,
               ),
-            ),
-            const SizedBox(height: 20),
+              const SizedBox(height: 12),
 
-            // Confirm Password
-            TextField(
-              controller: _confirmPasswordController,
-              obscureText: _obscureConfirmPassword,
-              decoration: InputDecoration(
-                labelText: 'Confirm Password',
-                prefixIcon: const Icon(Icons.lock),
-                border: const OutlineInputBorder(),
-                suffixIcon: IconButton(
-                  icon: Icon(_obscureConfirmPassword
-                      ? Icons.visibility_off
-                      : Icons.visibility),
-                  onPressed: () {
-                    setState(() {
-                      _obscureConfirmPassword = !_obscureConfirmPassword;
-                    });
-                  },
-                ),
-              ),
-            ),
-            const SizedBox(height: 30),
-
-            // Register Button
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: () {
-                  // TODO: Add registration logic
-                  if (_passwordController.text !=
-                      _confirmPasswordController.text) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Passwords do not match')),
-                    );
-                    return;
-                  }
-
-                  // ScaffoldMessenger.of(context).showSnackBar(
-                  //   const SnackBar(content: Text('Registered successfully!')),
-                  // );
-
-                  // Get.offAll(const LoginScreen());
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.primary,
-                  padding: const EdgeInsets.symmetric(vertical: 13),
-                ),
-                child: const Text(
-                  'Register',
-                  style: TextStyle(fontSize: 16, color: AppColors.textPrimary),
-                ),
-              ),
-            ),
-            const SizedBox(height: 20),
-
-            // Login redirect
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Text("Already have an account?"),
-                TextButton(
-                  onPressed: () {
-                    Get.offAll(const LoginScreen());
-                  },
-                  child: const Text(
-                    'Login',
-                    style: TextStyle(
-                      color: Color(0xFF0E68B2),
-                      fontWeight: FontWeight.bold,
+              /// Terms checkbox
+              Row(
+                children: [
+                  Checkbox(
+                    value: agree,
+                    onChanged: (v) => setState(() => agree = v!),
+                  ),
+                  const Expanded(
+                    child: Text(
+                      'I agree to the Terms of Use',
+                      style: TextStyle(fontSize: 14),
                     ),
                   ),
-                ),
-              ],
-            ),
-          ],
+                ],
+              ),
+
+              const SizedBox(height: 20),
+
+              /// Continue Button
+              Obx(() => SizedBox(
+                    width: double.infinity,
+                    height: 50,
+                    child: ElevatedButton(
+                      onPressed:
+                          authController.isLoading.value ? null : _submit,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFF5DB6B1),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(25),
+                        ),
+                      ),
+                      child: authController.isLoading.value
+                          ? const CircularProgressIndicator(
+                              color: Colors.white,
+                            )
+                          : const Text(
+                              'CONTINUE',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 16,
+                                letterSpacing: 1.2,
+                              ),
+                            ),
+                    ),
+                  )),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _inputField(
+    TextEditingController controller,
+    String title, {
+    bool obscure = false,
+    TextInputType keyboard = TextInputType.text,
+  }) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 14),
+      child: TextFormField(
+        controller: controller,
+        obscureText: obscure,
+        keyboardType: keyboard,
+        validator: (v) => v == null || v.isEmpty ? 'Required' : null,
+        decoration: InputDecoration(
+          labelText: title, // 👈 stays visible when text is entered
+          floatingLabelBehavior: FloatingLabelBehavior.auto,
+          contentPadding:
+              const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+            borderSide: const BorderSide(color: Color(0xFF5DB6B1)),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+            borderSide: const BorderSide(color: Color(0xFF5DB6B1), width: 2),
+          ),
         ),
       ),
     );
