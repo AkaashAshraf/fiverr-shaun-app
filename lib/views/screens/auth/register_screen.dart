@@ -48,6 +48,49 @@ class _SignUpScreenState extends State<SignUpScreen> {
     );
   }
 
+  void _showTermsBottomSheet() {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (context) {
+        return const Padding(
+          padding: EdgeInsets.all(20),
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Center(
+                  child: Text(
+                    'Terms of Use',
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                SizedBox(height: 20),
+                Text(
+                  'These are dummy terms of use.\n\n'
+                  '1. This is a demo application.\n'
+                  '2. Your data may be stored securely.\n'
+                  '3. Do not misuse the app.\n'
+                  '4. We are not responsible for any loss.\n'
+                  '5. By using this app, you agree to all terms.\n\n'
+                  'This content is just for testing UI.',
+                  style: TextStyle(fontSize: 14),
+                ),
+                SizedBox(height: 30),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -55,13 +98,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios, color: Color(0xFF5DB6B1)),
-          onPressed: () => Get.back(),
-        ),
+        iconTheme: const IconThemeData(color: Colors.black),
         title: const Text(
           'Sign Up',
-          style: TextStyle(color: Color(0xFF5DB6B1)),
+          style: TextStyle(color: Colors.black),
         ),
       ),
       body: SingleChildScrollView(
@@ -100,12 +140,26 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 children: [
                   Checkbox(
                     value: agree,
+                    activeColor: AppColors.primary,
                     onChanged: (v) => setState(() => agree = v!),
                   ),
-                  const Expanded(
-                    child: Text(
-                      'I agree to the Terms of Use',
-                      style: TextStyle(fontSize: 14),
+                  Expanded(
+                    child: Wrap(
+                      children: [
+                        const Text('I agree to the '),
+                        GestureDetector(
+                          onTap: _showTermsBottomSheet,
+                          child: const Text(
+                            'Terms of Use',
+                            style: TextStyle(
+                              fontStyle: FontStyle.italic,
+                              color: AppColors.primary,
+                              fontWeight: FontWeight.bold,
+                              decoration: TextDecoration.underline,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ],
@@ -116,15 +170,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
               /// Continue Button
               Obx(() => SizedBox(
                     width: double.infinity,
-                    height: 50,
+                    height: 48,
                     child: ElevatedButton(
                       onPressed:
                           authController.isLoading.value ? null : _submit,
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF5DB6B1),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(25),
-                        ),
+                        backgroundColor: AppColors.primary,
                       ),
                       child: authController.isLoading.value
                           ? const CircularProgressIndicator(
@@ -133,9 +184,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           : const Text(
                               'CONTINUE',
                               style: TextStyle(
+                                fontSize: 18,
                                 color: Colors.white,
-                                fontSize: 16,
-                                letterSpacing: 1.2,
                               ),
                             ),
                     ),
@@ -161,22 +211,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
         keyboardType: keyboard,
         validator: (v) => v == null || v.isEmpty ? 'Required' : null,
         decoration: InputDecoration(
-          labelText: title, // 👈 stays visible when text is entered
-          floatingLabelBehavior: FloatingLabelBehavior.auto,
-          contentPadding:
-              const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
-          ),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
-            borderSide: const BorderSide(color: Color(0xFF5DB6B1)),
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
-            borderSide: const BorderSide(color: Color(0xFF5DB6B1), width: 2),
-          ),
+          labelText: title,
+          border: const OutlineInputBorder(),
         ),
       ),
     );
